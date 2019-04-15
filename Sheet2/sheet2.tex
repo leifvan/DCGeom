@@ -1,0 +1,105 @@
+\documentclass[12pt]{article}
+ 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{wrapfig}
+\usetikzlibrary{calc,patterns,angles,quotes}
+ 
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+
+\usepackage{mathtools}
+
+%\DeclarePairedDelimiter\ceil{\left\lceil}  {\right\rceil}
+%\DeclarePairedDelimiter\floor{\left\lfloor}{\right\rfloor}
+ 
+\usepackage{amsthm}
+\newtheorem{proposition}{Proposition}
+\newtheorem{question}{Question}                                                                                                                                                                                          
+ 
+\begin{document}
+ 
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+ 
+\title{Solutions to Exercise Sheet 2}
+\author{Leif Van Holland \\ \\
+\textsc{Discrete and Computational Geometry}}
+
+\maketitle
+
+\section*{Exercise 4}
+\begin{proposition}
+For $\alpha=\frac{1}{2}, r=4, D(n)=C'\cdot n \log n$ with $C'>0$, the constant $R$ in Lemma 4 is bounded by $R \leq 0.057\cdot C\cdot C'.$
+\end{proposition}
+\begin{proof}
+To apply Lemma 4, we first have to choose an $\epsilon > 0$ such that the sequence $\frac{D(n)}{n^\epsilon}$ increases monotonically. In fact, for the choice $\epsilon = 1$ we get
+\[ \frac{D(n)}{n^\epsilon} = \frac{C'n \log n}{n} = C' \log n \]
+which obviously fulfills the monotony criterion for any $C'>0$.
+
+\noindent In the proof it is assumed that the problem will be recursively divided into subproblems until the condition $(\ln r_l + 1)\cdot\alpha_l^\epsilon < 1$ holds. The values $r$ and $\alpha$ will be modified when subdividing the problems, amounting to $r_l = r^l > r$ and $\alpha_l = \alpha^l < \alpha$ after $l$ divisions. In our case, it is necessary to divide $l=2$ times, as
+\[ l=1 \implies r_1=4,\: \alpha_1 = \frac{1}{2} \implies (\ln 4 + 1)\cdot \frac{1}{2} \approx 1.69 > 1,\]
+but
+\[l=2 \implies r_2=16,\: \alpha_2=\frac{1}{4} \implies (\ln 16 + 1)\cdot \frac{1}{4} \approx 0.94 < 1. \]
+From the proof of Lemma 4 we can derive conditions for the constants $C$ and $R$ based on the following upper bound
+\[ \hat{T}(n) \leq (\ln r + 1)\cdot\alpha^\epsilon\cdot C\cdot D(n) + R\cdot D(n) \]
+where we found that it suffices to choose $R$ and $C$ such that
+\[ \frac{R}{1-(\ln r + 1)\cdot \alpha^\epsilon} \leq C \]
+and accounting for the factor $C'$ and precise values for $\alpha$ and $r$ we get
+\[ \frac{R}{1-(\ln 16 + 1)\cdot \frac{1}{4}} \leq C\cdot C' \iff \frac{R}{C'\cdot (1-(\ln 16 + 1)\cdot \frac{1}{4})} \leq C \iff \frac{R}{0.057 \cdot C'} \leq C \]
+which in turn gives us an upper bound $R \leq 0.057\cdot C\cdot C'$.
+\end{proof}
+
+\section*{Exercise 5}
+\begin{proposition}
+Given $a,b > 0$, for each $\epsilon > 0$ there exists some $\delta > 0$ such that
+\begin{align}
+    1 - \epsilon < \frac{a+\delta}{b+\delta}<1+\epsilon.
+\label{eq:epsilonineq}
+\end{align}
+\end{proposition}
+\begin{proof}
+First we can observe the behavior of the expression for large values of $\delta$:
+\[ \lim_{\delta\to\infty} \frac{a+\delta}{b+\delta} = \lim_{\delta\to\infty}\frac{1}{1} = 1\]
+based on the fact that $\lim_{\delta\to\infty} (a + \delta) = \infty$ (and similarly for $b+\delta$). The fact that this limit exists is equal to the statement that $\forall \epsilon>0\: \exists S>0 : \forall \delta > S$ such that
+\[
+    \left\lvert \frac{a+\delta}{b+\delta}-1 \right\rvert < \epsilon
+    \iff 1 - \epsilon < \frac{a+\delta}{b+\delta}<1+\epsilon. \]
+    
+\noindent Therefore, we can always find a $\delta$ so that \eqref{eq:epsilonineq} holds.
+\end{proof}
+
+\section*{Exercise 6}
+\begin{proposition}
+Let $T(q)$ be the value of the random variable \emph{cntr} for a given permutation $q=q[1],...,q[n]$. Then, the following statement about the estimated value $E(T(q))$ of the random variable holds:
+\[ E(T(q)) \in \Theta(\ln n). \]
+\end{proposition}
+\begin{proof}
+We can closely follow the argumentation for the randomized analysis of the naive algorithm from the lecture. First, note that the permutation is chosen uniformly at random. This implies that the probability of finding the maximum of the n values $q[1],...,q[n]$ at position $k$ is $\frac{1}{n}$. Let $N(i)$ be a random variable with
+\[ N(i) :=
+\begin{cases}
+1, \text{ if } q[i] = \min\{q[1],...,q[i]\}, \\
+0, \text{ otherwise.}
+\end{cases}
+\]
+For the random variable $T(q)$ we get
+\[
+E(T(q)) = E\left(\sum_{i=1}^{n} N(i)\right) = \sum_{i=1}^{n} \frac{1}{i}.
+\]
+The sum describes the $n$-th harmonic number $H_n$ and we already know that
+\[
+\ln n < H_n < \ln n + 1.
+\]
+We can conclude that
+\[ \ln n \leq E(T(q)) \leq \ln n + 1 \implies E(T(q)) \in \Theta(\ln n). \]
+\end{proof}
+% --------------------------------------------------------------
+%     You don't have to mess with anything below this line.
+% --------------------------------------------------------------
+ 
+\end{document}

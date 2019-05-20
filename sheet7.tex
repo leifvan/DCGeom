@@ -1,0 +1,76 @@
+\documentclass[12pt]{article}
+ 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\usepackage{wrapfig}
+\usepackage{marvosym}
+\usetikzlibrary{calc,patterns,angles,quotes}
+ 
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+
+\usepackage{mathtools}
+
+%\DeclarePairedDelimiter\ceil{\left\lceil}  {\right\rceil}
+%\DeclarePairedDelimiter\floor{\left\lfloor}{\right\rfloor}
+ 
+\usepackage{amsthm}
+\newtheorem{proposition}{Proposition}
+\newtheorem{question}{Question}                                                                                                                                                                                          
+ 
+\begin{document}
+ 
+\title{Solutions to Exercise Sheet 7}
+\author{Leif Van Holland \\ \\
+\textsc{Discrete and Computational Geometry}}
+
+\maketitle
+
+\section*{Exercise 19}
+\begin{proposition}
+For $x_1, ..., x_n\in\R$, the following inequality holds:
+\[ \frac{x_1 + ... + x_n}{n} \geq (x_1\cdot ... \cdot x_n)^{\frac{1}{n}} \]
+\end{proposition}
+\begin{proof}
+This proposition is not well-defined. For the following example (which results in a well-defined inequality), it is also not true. Consider the case $n=2$ with $x_1 = x_2 = -1$. Then we get
+\[ \frac{1}{2}(-1 -1) = -1 < \sqrt{-1 \cdot -1} = 1. \]
+\end{proof}
+
+\section*{Exercise 20}
+\begin{itemize}
+    \item [2.]
+        \begin{proposition}
+            For convex sets $A,B\in\R^d$, the set
+            \[ S = \bigcup_{t\in[0,1]} \{t\} \times \big((1-t)A + tB \big) \]
+            is also convex.
+        \end{proposition}
+        \begin{proof}
+            The set $S$ consists of all lines between points in $A$ and $B$. For any two points $p,q\in S$, we can therefore find lines $a_1b_1$ and $a_2b_2$ with $a_1,a_2\in A, b_1,b_2\in B$ and
+            \[ p=(1-t_1)a_1+t_1b_1, \quad q=(1-t_2)a_2+t_2b_2, \quad t_1,t_2\in[0,1]. \]
+            To show that $S$ is convex, we have to show that any point on $pq$ is also inside $S$. Let such a point be given by $s'$ = $\big((1-r)t_1 + rt_2, s\big)$, with
+            \[\quad s := (1-r)p + rq, \quad r\in[0,1].\]
+            First of all, note that $(1-r)t_1+rt_2 \in [t_1,t_2]$. With the definitions
+            \[ \delta := (1-r)t_1+rt_2, \quad \lambda := \frac{r(1-t_2)}{1-\delta}, \quad \mu := \frac{rt_2}{\delta},\]
+            we will show that $s'$ itself can be represented as a point on a line between points from $A$ and $B$. More precisely,
+            \[ s \overset{!}{=} (1-\delta)\underbrace{((1-\lambda)a_1+\lambda a_2)}_{\in A} + \delta\underbrace{((1-\mu)b_1+\mu b_2)}_{\in B}. \]
+            We can see this by substituting values for $\delta, \lambda, \mu$ until we arrive at the first definition of $s$.
+            \begin{align*}
+                & (1-\delta)((1-\lambda)a_1+\lambda a_2) + \delta((1-\mu)b_1+\mu b_2) \\
+                &= (1-\delta)\left(\left(1-\frac{r(1-t_2)}{1-\delta}\right)a_1 + \frac{r(1-t_2)}{1-\delta} a_2\right) + \delta\left(\left(1-\frac{rt_2}{\delta}\right)b_1+\frac{rt_2}{\delta}b_2\right) \\
+                &= ((1-\delta)-r(1-t_2))a_1+r(1-t_2)a_2+(\delta-rt_2)b_1+rt_2b_2 \\
+                &= ((1-((1-r)t_1+rt_2))-r(1-t_2))a_1+r(1-t_2)a_2+((1-r)t_1+rt_2-rt_2)b_1+rt_2b_2 \\
+                &= ((1-(1-r)t_1-rt_2)-r(1-t_2))a_1+r(1-t_2)a_2+((1-r)t_1)b_1+rt_2b_2 \\
+                &= (1-r)(1-t_1)a_1+r(1-t_2)a_2+(1-r)t_1b_1+rt_2b_2 \\
+                &= (1-r)((1-t_1)a_1+t_1b_1)+r((1-t_2)a_2+t_2b_2) \\
+                &= (1-r)p + rq \\
+                &= s.
+            \end{align*}
+        \end{proof}
+\end{itemize}
+
+\end{document}

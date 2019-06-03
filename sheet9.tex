@@ -1,0 +1,104 @@
+\documentclass[12pt]{article}
+ 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\usepackage{wrapfig}
+\usepackage{marvosym}
+\usetikzlibrary{calc,patterns,angles,quotes}
+ 
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+
+\usepackage{mathtools}
+
+%\DeclarePairedDelimiter\ceil{\left\lceil}  {\right\rceil}
+%\DeclarePairedDelimiter\floor{\left\lfloor}{\right\rfloor}
+ 
+\usepackage{amsthm}
+\newtheorem{proposition}{Proposition}
+\newtheorem{question}{Question}                                                                                                                                                                                          
+ 
+\begin{document}
+ 
+\title{Solutions to Exercise Sheet 9}
+\author{Leif Van Holland \\ \\
+\textsc{Discrete and Computational Geometry}}
+
+\maketitle
+
+\section*{Exercise 25}
+For the following task, we will consider two values $\epsilon_1, \epsilon_2$ for epsilon. In the definition of $\epsilon$-nets, only sets $F\in\mathcal{F}$ with $\mu(F) \geq \epsilon$ are considered. For $\epsilon_1 := \frac{\pi}{100}$, this amounts to all sets $B_{0.1}(x)$ that are fully contained in $X$ (i.e. $X \cap B_{0.1}(x) = B_{0.1}(x)$). The other value is chosen as $\epsilon_2 := \frac{\pi}{400}$. In this case, all elements in $\mathcal{F}$ are considered, because the smallest possible $F\in\mathcal{F}$ is a circle centered at one of the corners of the unit square and, when intersected with $X$, has an area of
+\[ \mu(F) = \frac{1}{4}\cdot\text{vol}(B_{0.1}(x)) = \frac{1}{4}\cdot 0.1^2 \pi = \epsilon_2. \]
+\begin{itemize}
+    \item [a)] To apply the $\epsilon$-net theorem, we first have to check if two preconditions hold:
+    \begin{itemize}
+        \item [(i)] $r>2$ for $\epsilon = \frac{1}{r}$ and
+        \item [(ii)] $\dim_{VC}(\mathcal{F}) < \infty$.
+    \end{itemize}
+    For both $\epsilon_1$ and $\epsilon_2$, we get that $r > 2$:
+    \begin{align*}
+        \epsilon_1 &= \frac{\pi}{100} = \frac{1}{r_1} \iff r_1 = \frac{100}{\pi} \approx 31.83 > 2 \\
+        \epsilon_2 &= \frac{\pi}{400} = \frac{1}{r_2} \iff r_2 = \frac{400}{\pi} \approx 127.32 > 2
+    \end{align*}
+    For (ii), we will show
+    \begin{proposition}
+    The above set system $(X,\mathcal{F})$ has $d := \dim_{VC}(\mathcal{F}) = 3$.
+    \end{proposition}
+    \begin{proof}
+    Consider the following construction. Choose $p=(0.5,0.5)$ as the center of the unit square. For $A$ with $|A|=n$ we choose points on $B_{0.1}(p)$ in such a way that they maximize the pairwise distance between them. For $|A|\leq 3$ we obtain examples that are shattered by $\mathcal{F}$. They can all be inferred from the example for $|A|=3$ in Figure 1.
+    
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width=0.8\textwidth]{shatter_example.png}
+        \caption{Example for the construction for $|A|=3$. Circles denote the 3-element (gray), 2-element (green) and 1-element (yellow) subsets. }
+        \label{fig:my_label}
+    \end{figure}
+    
+    Now consider the construction for $|A|=4$. Assuming the points $p_1,p_2,p_3,p_4 \in A$ are ordered by their neighborhood on the circle. Then, $p_1$ and $p_3$ are opposite to each other and have distance $|p_1 p_3| = 0.2$. The only $F\in\mathcal{F}$ containing them is $B_{0.1}(p)$, but this circle also contains $p_2$ and $p_4$. Therefore $A$ is not shattered by $\mathcal{F}$. We can w.l.o.g. assume that it suffices to show that the constructed set is not shattered to show that there can not be such as a set, because moving a pair of points closer together will worsen the situation when considering a different subset of points.
+    
+    In fact, for all examples above we also have to find an $F_0 \in \mathcal{F}$ with $F \cap A = \varnothing$. As the circles are small compared to the size of the unit square, we can assume that the examples are constructed so that this is always possible.
+    \end{proof}
+    
+    Now we can explicitly calculate the constant $C$ from the proof of the $\epsilon$-net theorem and determine an upper bound for the size of an $\epsilon$-net for the set system.
+	Consider $r_1 = \frac{100}{\pi}$ as calculated above. We have to choose a $C_1$ such that
+	\begin{align*}
+	    \left(2\cdot e \cdot C_1 \cdot r_1 \cdot \ln{r_1} \cdot r_1^{\frac{-C_1}{4}}\right)^d &< \frac{1}{2} \\
+	    \left(2\cdot e \cdot C_1 \cdot \frac{100}{\pi} \cdot \ln{\left(\frac{100}{\pi}\right)} \cdot \left(\frac{100}{\pi}\right)^{\frac{-C_1}{4}}\right)^3 &< \frac{1}{2}
+	\end{align*}
+	This can be approximated by using a CAS like WolframAlpha for the boundary case (finding $C_1$ for the left term being equal to $\frac{1}{2}$) and we get $C_1 \approx 10.36$. With the $\epsilon$-net theorem we can conclude, that there exists an $\epsilon$-net $N$ with $|N|\leq s_1$ where
+	\[ s_1 = C_1 \cdot d \cdot r \cdot \ln{r} \approx 3423.44. \]
+	Likewise, for $r_2$ we get $C_2 \approx 8.67$ and $s_2 \approx 16050.9$.
+	
+	\item [b)] In reality, there exist much smaller $\epsilon$-nets $N$ for $(X,\mathcal{F})$. Considering $\epsilon_1$, we only require a transversal of all circles $B_{0.1}(p)$ that are fully inside $X$ (i.e. $p\in[0.1,0.9]^2$). In fact, it suffices to choose a grid in such a way that for every circle there is at least one grid point inside of it. A trivial choice would be $N = 0.1 \cdot \mathbb{Z}^2 \cap [0.1, 0.9]^2$. In this case, $|N|=81$. With the same argument we can choose for $\epsilon_2$ the grid $N = 0.1 \cdot \mathbb{Z}^2 \cap [0,1]^2$, which actually is a transversal for $\mathcal{F}$ with $|N|=121$.
+    
+\end{itemize}
+
+\section*{Exercise 26}
+\begin{itemize}
+    \item [b)] 
+    \begin{align*}
+        E(X\cdot Y)
+        &= \sum_x \sum_y x\cdot y \cdot P(X=x, Y=y) \\
+        &= \sum_x \sum_y x\cdot y \cdot P(X=x) \cdot P(Y=y) \\
+        &= \sum_x x \cdot P(X=x) \cdot \left( \sum_y y \cdot P(Y=y)\right) \\
+        &= E(X) \cdot E(Y).
+    \end{align*}
+    
+    \item [c)]
+    \begin{align*}
+        Var(X+Y) &= E[((X+Y)-E[X+Y])^2] \\
+        &= E[(X+Y)^2 - 2\cdot (X+Y) E[X+Y] + E[X+Y]^2] \\
+        &= E[(X+Y)^2] - 2\cdot E[X+Y]^2 + E[X+Y]^2 \\
+        &= E[X^2] + 2\cdot E[XY] + E[Y^2] - E[X+Y]^2 \\
+        &= E[X^2] + 2\cdot E[X]E[Y] + E[Y^2] - E[X]^2-2\cdot E[X]E[Y]- E[Y]^2 \\
+        &= E[X^2] - E[X]^2 + E[Y^2] - E[Y]^2 \\
+        &= Var(X) + Var(Y).
+    \end{align*}
+\end{itemize}
+
+\end{document}
